@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Perspective</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <style type="text/css">
+ #box {
+    perspective: 600px;
+    /*perspective-origin: 10% 10%;*/
+    margin: 100px;
+    border: 1px solid black;
+    width: 200px;
+  }
+  #red-box {
+    background-color: red;
+    width: 200px;
+    height: 200px;
+    transform: rotateX(0deg);
+    transition: all 3s ease;
+     /*transform: rotateX(45deg);*/
+      /*transform: rotateZ(45deg);*/
+      /*transform: translateZ(-500px);*/
+  }
+
+  #red-box.flip {
+    transform: rotateX(75deg) rotateY(3600deg) rotateZ(45deg);
+ }
+  </style>
+</head>
+
+<body>
+  <div id="box">
+    <div id="red-box"></div>
+  </div>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    $('#red-box').click(function() {
+      $(this).toggleClass('flip');
+      // if ($(this).contains('flip')) {
+      //   $(this).removeClass('flip');
+      // } else {
+      //   $(this).addClass('flip');
+      // }
+
+    });
+  });
+  </script>
+</body>
+
+</html>
