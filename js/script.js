@@ -29,8 +29,7 @@ $(document).ready(function() {
         if (diff == 'easy') { // 5 x 2
             rowSize = 5;
             gridSize = rowSize * 2;
-
-        } else if (diff == 'medium') { // 5 x 4
+        } else if (diff == 'med') { // 5 x 4
             rowSize = 5;
             gridSize = rowSize * 4;
         } else if (diff == 'hard') { //7 x 4
@@ -42,9 +41,8 @@ $(document).ready(function() {
         //only need 1/2 grid's worth of cards. there must be mates.
         gameTiles = cards.slice(0, (gridSize / 2));
 
-        //merge so we'll have the match for each card.
+        //merge so we'll have a match for each card.
         gridArray = $.merge(gameTiles, gameTiles);
-        // console.log(gridArray);
 
         //shuffle the images/cards
         shuffleDeck(gridArray);
@@ -58,11 +56,15 @@ $(document).ready(function() {
         $('.mg-tile').click(function() {
             $(this).find('.mg-tile-inner').addClass('flipped');
             //now see if two are flipped
-            var flippedTiles = $('.flipped.unmatched');
-            console.log(flippedTiles.length);
+            var flippedTiles = $('.mg-tile-inner.flipped.unmatched');
+
             if (flippedTiles.length === 2) {
                 checkMatch(flippedTiles);
+                moves++;
+                $('#move-counter').html(moves);
+                $('#wins-counter').html(wins);
             }
+
         });
     });
 
@@ -70,21 +72,23 @@ $(document).ready(function() {
 
 function checkMatch(flippedTiles) {
 
-    var img1 = $(flippedTiles[0]).find('.mg-tile-inside img').attr('src');
-    var img2 = $(flippedTiles[1]).find('.mg-tile-inside img').attr('src');
-    if (img1 === img2) { 
-        alert("You found a match"); 
+    var imgSrc1 = $(flippedTiles[0]).find('.mg-tile-inside img').attr('src');
+    var imgSrc2 = $(flippedTiles[1]).find('.mg-tile-inside img').attr('src');
+    if (imgSrc1 === imgSrc2) { 
+        wins++;
          $(flippedTiles[0]).removeClass('unmatched');
          $(flippedTiles[1]).removeClass('unmatched');
          $(flippedTiles[0]).addClass('matched');
          $(flippedTiles[1]).addClass('matched');
     } else {
-        alert("Sorry try again");
-        $(flippedTiles[0]).removeClass('flipped');
-        $(flippedTiles[1]).removeClass('flipped');
+
+        setTimeout(function(){
+              $(flippedTiles[0]).removeClass('flipped');
+                $(flippedTiles[1]).removeClass('flipped');
+        }, 2000);
+      
     }
-    // var img1 = 
-    // console.log(flippedTiles[i].)
+  
 }
 
 function putCardsOnTheBoard(gridArray) {
