@@ -42,12 +42,21 @@ $(document).ready(function() {
                 $('#move-counter').html(moves);
                 $('#wins-counter').html(wins);
             }
-
+        });
+        $('#matched-all').click(function() {
+            newGame();
         });
     });
 
 });
 
+function newGame() {
+    moves = 0;
+     $('#button-bucket').toggle();
+     //Clear mg-contents
+     $('.mg-tile').remove();
+      $('#matched-all').removeClass('move');
+}
 function prepareGame(difficulty) {
 
     setGridSize(difficulty);
@@ -105,7 +114,7 @@ function checkMatch(flippedTiles) {
 
 function checkWin() {
     if ($('.flipped.matched').length == gridArray.length) {
-        alert('you have matched them all');
+        $('#matched-all').addClass('move');
         wins++;
     }
 }
