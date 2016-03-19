@@ -23,39 +23,17 @@ var gameTiles;
 var gridArray;
 var rowSize;
 
+
 $(document).ready(function() {
     $('input').click(function() {
-        var diff = $(this).val();
-        if (diff == 'easy') { // 5 x 2
-            rowSize = 5;
-            gridSize = rowSize * 2;
-        } else if (diff == 'med') { // 5 x 4
-            rowSize = 5;
-            gridSize = rowSize * 4;
-        } else if (diff == 'hard') { //7 x 4
-            rowSize = 7;
-            gridSize = rowSize * 4;
-        }
+        var difficulty = $(this).val();
+        prepareGame(difficulty);
 
-        $('#button-bucket').toggle();
-        //only need 1/2 grid's worth of cards. there must be mates.
-        gameTiles = cards.slice(0, (gridSize / 2));
-
-        //merge so we'll have a match for each card.
-        gridArray = $.merge(gameTiles, gameTiles);
-
-        //shuffle the images/cards
-        shuffleDeck(gridArray);
-        //now create html to populate the game board
-        putCardsOnTheBoard(gridArray);
-        //remove ".flipped" so back of cards show.  Now ready for play!
-        setTimeout(function() {
-            $('.mg-tile-inner').removeClass('flipped');
-        }, 2000);
         //Register click function for each tile/card
         $('.mg-tile').click(function() {
+            //turnover "this" card/tile
             $(this).find('.mg-tile-inner').addClass('flipped');
-            //now see if two are flipped
+            //now see if two tiles are flipped
             var flippedTiles = $('.mg-tile-inner.flipped.unmatched');
 
             if (flippedTiles.length === 2) {
@@ -70,38 +48,79 @@ $(document).ready(function() {
 
 });
 
+function prepareGame(difficulty) {
+
+    setGridSize(difficulty);
+    //only need 1/2 grid's worth of cards. there must be mates.
+    gameTiles = cards.slice(0, (gridSize / 2));
+
+    //merge so we'll have a match for each card.
+    gridArray = $.merge(gameTiles, gameTiles);
+
+    //shuffle the images/cards
+    shuffleDeck(gridArray);
+    //now create html to populate the game board
+    putCardsOnTheBoard(gridArray);
+
+    $('#button-bucket').toggle();
+
+    //remove ".flipped" so back of cards show.  Now ready for play!
+    setTimeout(function() {
+        $('.mg-tile-inner').removeClass('flipped');
+    }, 2000);
+}
+
+function setGridSize(difficulty) {
+    if (difficulty == 'easy') { // 5 x 2
+        rowSize = 5;
+        gridSize = rowSize * 2;
+    } else if (difficulty == 'med') { // 5 x 4
+        rowSize = 5;
+        gridSize = rowSize * 4;
+    } else if (difficulty == 'hard') { //7 x 4
+        rowSize = 7;
+        gridSize = rowSize * 4;
+    }
+}
+
 function checkMatch(flippedTiles) {
 
     var imgSrc1 = $(flippedTiles[0]).find('.mg-tile-inside img').attr('src');
     var imgSrc2 = $(flippedTiles[1]).find('.mg-tile-inside img').attr('src');
-    if (imgSrc1 === imgSrc2) { 
-        wins++;
-         $(flippedTiles[0]).removeClass('unmatched');
-         $(flippedTiles[1]).removeClass('unmatched');
-         $(flippedTiles[0]).addClass('matched');
-         $(flippedTiles[1]).addClass('matched');
+    if (imgSrc1 === imgSrc2) {
+        $(flippedTiles[0]).removeClass('unmatched');
+        $(flippedTiles[1]).removeClass('unmatched');
+        $(flippedTiles[0]).addClass('matched');
+        $(flippedTiles[1]).addClass('matched');
+        checkWin();
     } else {
 
-        setTimeout(function(){
-              $(flippedTiles[0]).removeClass('flipped');
-                $(flippedTiles[1]).removeClass('flipped');
+        setTimeout(function() {
+            $(flippedTiles[0]).removeClass('flipped');
+            $(flippedTiles[1]).removeClass('flipped');
         }, 2000);
-      
+
     }
-  
+}
+
+function checkWin() {
+    if ($('.flipped.matched').length == gridArray.length) {
+        alert('you have matched them all');
+        wins++;
+    }
 }
 
 function putCardsOnTheBoard(gridArray) {
     //place
-        for (i = 0; i < gridArray.length; i++) {
-            var html = '<div class="mg-tile">';
-            html += '<div class="mg-tile-inner unmatched flipped">';
-            html += '<div class="mg-tile-outside"></div>';
-            html += '<div class="mg-tile-inside">' + gridArray[i] + '</div>';
-            html += '</div>';
-            html += '</div>';
-            $('#mg-contents').append(html);
-        }
+    for (i = 0; i < gridArray.length; i++) {
+        var html = '<div class="mg-tile">';
+        html += '<div class="mg-tile-inner unmatched flipped">';
+        html += '<div class="mg-tile-outside"></div>';
+        html += '<div class="mg-tile-inside">' + gridArray[i] + '</div>';
+        html += '</div>';
+        html += '</div>';
+        $('#mg-contents').append(html);
+    }
 }
 
 // https://github.com/coolaj86/knuth-shuffle
