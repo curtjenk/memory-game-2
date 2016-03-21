@@ -94,6 +94,7 @@ function setGridSize(difficulty) {
 
 function checkMatch(flippedTiles) {
 
+//todo: disable all buttons until cards are flipped
     var imgSrc1 = $(flippedTiles[0]).find('.mg-tile-inside img').attr('src');
     var imgSrc2 = $(flippedTiles[1]).find('.mg-tile-inside img').attr('src');
     if (imgSrc1 === imgSrc2) {
@@ -107,6 +108,7 @@ function checkMatch(flippedTiles) {
         setTimeout(function() {
             $(flippedTiles[0]).removeClass('flipped');
             $(flippedTiles[1]).removeClass('flipped');
+            //todo: now re-enable buttons
         }, 2000);
 
     }

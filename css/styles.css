@@ -10,20 +10,28 @@ img {
     margin: 0 auto;
 }
 
-#mg-contents {
+/*#mg-contents {
     position: relative;
     padding-bottom: 50%;
-}
+}*/
 
 .mg-tile {
-    /*height: 50%;*/
     width: 20%;
     padding: 5px;
     box-sizing: border-box;
     float: left;
     height: 200px;
     perspective: 500px;
+    margin-bottom: 2px;   
 }
+
+.easy .mg-tile, .med .mg-tile {
+    width: 20%;
+}
+.hard .mg-tile {
+    width: 14.28%;
+}
+
 
 .mg-tile-inner {
     /*height and width must be counter set*/
@@ -102,6 +110,8 @@ h1 {
     background-color: red;
 }
 
+
+
 #matched-all {
     width: 30%;
     position: absolute;
@@ -114,5 +124,3 @@ h1 {
     transition: all 4s ease;
     transform: rotate(3600deg);
 }
-
-
